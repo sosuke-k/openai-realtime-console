@@ -41,12 +41,13 @@ export default function App() {
 
     const baseUrl = "https://api.openai.com/v1/realtime";
     const model = "gpt-4o-realtime-preview-2024-12-17";
+    const instructions = "常に丁寧な日本語で回答してください。";
     const sdpResponse = await fetch(`${baseUrl}?model=${model}`, {
       method: "POST",
-      body: offer.sdp,
+      body: JSON.stringify({ sdp: offer.sdp, instructions }),
       headers: {
         Authorization: `Bearer ${EPHEMERAL_KEY}`,
-        "Content-Type": "application/sdp",
+        "Content-Type": "application/json",
       },
     });
 
