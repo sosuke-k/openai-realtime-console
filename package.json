@@ -1,8 +1,8 @@
 {
   "type": "module",
   "scripts": {
-    "dev": "node server.js --dev",
-    "start": "node server.js",
+    "dev": "uvicorn server:app --reload",
+    "start": "uvicorn server:app",
     "build": "npm run build:client && npm run build:server",
     "build:client": "vite build --outDir dist/client --ssrManifest",
     "build:server": "vite build --outDir dist/server --ssr /index.js",
