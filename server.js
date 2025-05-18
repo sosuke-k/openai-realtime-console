@@ -1,11 +1,11 @@
 import express from "express";
 import fs from "fs";
 import { createServer as createViteServer } from "vite";
+import { execFile } from "child_process";
 import "dotenv/config";
 
 const app = express();
 const port = process.env.PORT || 3000;
-const apiKey = process.env.OPENAI_API_KEY;
 
 // Configure Vite middleware for React client
 const vite = await createViteServer({
@@ -14,30 +14,23 @@ const vite = await createViteServer({
 });
 app.use(vite.middlewares);
 
-// API route for token generation
-app.get("/token", async (req, res) => {
-  try {
-    const response = await fetch(
-      "https://api.openai.com/v1/realtime/sessions",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: "gpt-4o-realtime-preview-2024-12-17",
-          voice: "verse",
-        }),
-      },
-    );
-
-    const data = await response.json();
-    res.json(data);
-  } catch (error) {
-    console.error("Token generation error:", error);
-    res.status(500).json({ error: "Failed to generate token" });
-  }
+// API route for token generation using Python script
+app.get("/token", (req, res) => {
+  execFile("python3", ["token.py"], { env: process.env }, (err, stdout, stderr) => {
+    if (err) {
+      console.error("Token generation error:", err);
+      console.error(stderr);
+      res.status(500).json({ error: "Failed to generate token" });
+      return;
+    }
+    try {
+      const data = JSON.parse(stdout);
+      res.json(data);
+    } catch (e) {
+      console.error("Token parse error:", e);
+      res.status(500).json({ error: "Failed to generate token" });
+    }
+  });
 });
 
 // Render the React client

@@ -10,13 +10,26 @@ Before you begin, you'll need an OpenAI API key - [create one in the dashboard h
 cp .env.example .env
 ```
 
-Running this application locally requires [Node.js](https://nodejs.org/) to be installed. Install dependencies for the application with:
+Running this application locally requires [Node.js](https://nodejs.org/) and [Python](https://www.python.org/) to be installed.
+Install dependencies for the frontend with:
 
 ```bash
 npm install
 ```
 
-Start the application server with:
+Install Python dependencies with:
+
+```bash
+pip install -r requirements.txt
+```
+
+Build the React frontend:
+
+```bash
+npm run build:client
+```
+
+Start the development server with:
 
 ```bash
 npm run dev
@@ -24,7 +37,7 @@ npm run dev
 
 This should start the console application on [http://localhost:3000](http://localhost:3000).
 
-This application is a minimal template that uses [express](https://expressjs.com/) to serve the React frontend contained in the [`/client`](./client) folder. The server is configured to use [vite](https://vitejs.dev/) to build the React frontend.
+This application is a minimal template that uses [Express](https://expressjs.com/) to serve the React frontend contained in the [`/client`](./client) folder. The token generation endpoint is implemented in Python (`token.py`). The frontend is built with [Vite](https://vitejs.dev/).
 
 This application shows how to send and receive Realtime API events over the WebRTC data channel and configure client-side function calling. You can also view the JSON payloads for client and server events using the logging panel in the UI.
 
